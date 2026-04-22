@@ -1,0 +1,19 @@
+# Environment
+.env
+.venv/
+
+# dbt
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+
+# DuckLake
+lake/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+logs/

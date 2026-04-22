@@ -1,0 +1,8 @@
+websockets
+pika
+python-dotenv
+psycopg2-binary
+dbt-postgres
+duckdb
+pandas
+sqlalchemy

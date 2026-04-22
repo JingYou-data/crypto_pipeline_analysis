@@ -1,0 +1,21 @@
+dbt_project:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 5433
+      user: postgres
+      password: password123
+      dbname: crypto_db
+      schema: analytics
+      threads: 4
+    docker:
+      type: postgres
+      host: postgres
+      port: 5432
+      user: postgres
+      password: password123
+      dbname: crypto_db
+      schema: analytics
+      threads: 4

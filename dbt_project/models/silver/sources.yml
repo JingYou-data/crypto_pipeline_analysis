@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: crypto_db
+    schema: bronze
+    tables:
+      - name: raw_trades
+        description: Raw trade data from Coinbase
+        columns:
+          - name: trade_id
+          - name: product_id
+          - name: price
+          - name: size
+          - name: side
+          - name: time
+          - name: raw_data

@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: trades
+    description: Cleaned and deduplicated trade data from Coinbase
+    columns:
+      - name: trade_id
+        description: Unique trade identifier
+        tests:
+          - not_null
+          - unique
+
+      - name: product_id
+        description: Trading pair
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['BTC-USD', 'ETH-USD', 'SOL-USD']
+
+      - name: price
+        description: Trade execution price
+        tests:
+          - not_null
+
+      - name: size
+        description: Trade size
+        tests:
+          - not_null
+
+      - name: side
+        description: Buy or sell
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['buy', 'sell']
+
+      - name: time
+        description: Trade timestamp
+        tests:
+          - not_null

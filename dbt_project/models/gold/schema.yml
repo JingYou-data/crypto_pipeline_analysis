@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: trade_metrics
+    description: Hourly aggregated trade metrics per product
+    columns:
+      - name: product_id
+        description: Trading pair
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['BTC-USD', 'ETH-USD', 'SOL-USD']
+
+      - name: trade_hour
+        description: Hour of trading activity
+        tests:
+          - not_null
+
+      - name: total_volume
+        description: Total traded volume in the hour
+        tests:
+          - not_null
+
+      - name: buy_volume
+        description: Total buy volume in the hour
+        tests:
+          - not_null
+
+      - name: sell_volume
+        description: Total sell volume in the hour
+        tests:
+          - not_null
+
+      - name: trade_count
+        description: Number of trades in the hour
+        tests:
+          - not_null
+
+      - name: high_price
+        description: Highest trade price in the hour
+        tests:
+          - not_null
+
+      - name: low_price
+        description: Lowest trade price in the hour
+        tests:
+          - not_null
+
+      - name: avg_price
+        description: Average trade price in the hour
+        tests:
+          - not_null
+
+      - name: price_open
+        description: First trade price in the hour
+        tests:
+          - not_null
+
+      - name: price_close
+        description: Last trade price in the hour
+        tests:
+          - not_null
+
+      - name: buy_ratio
+        description: Ratio of buy volume to total volume
+        tests:
+          - not_null

@@ -1,0 +1,85 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: always
+
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: crypto_db
+    ports:
+            - "5433:5432"
+    volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: crypto_db
+      MB_DB_PORT: 5432
+      MB_DB_USER: postgres
+      MB_DB_PASS: password123
+      MB_DB_HOST: postgres
+    depends_on:
+      - postgres
+    restart: always
+
+
+  airflow-webserver:
+    image: apache/airflow:2.9.0
+    container_name: airflow-webserver
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:password123@postgres/crypto_db
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'crypto_secret_key_123'
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./dbt_project:/opt/airflow/dbt_project
+    command: bash -c "pip install dbt-postgres && airflow webserver"
+    restart: always
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.0
+    container_name: airflow-scheduler
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:password123@postgres/crypto_db
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'crypto_secret_key_123'
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./dbt_project:/opt/airflow/dbt_project
+    command: bash -c "pip install dbt-postgres && airflow scheduler"
+    restart: always
+
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
