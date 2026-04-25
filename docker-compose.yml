@@ -60,7 +60,7 @@ services:
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./dbt_project:/opt/airflow/dbt_project
-    command: bash -c "pip install dbt-postgres && airflow webserver"
+    command: bash -c "pip install dbt-postgres && rm -f /opt/airflow/airflow-webserver.pid && airflow webserver"
     restart: always
 
   airflow-scheduler:
